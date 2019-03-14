@@ -31,27 +31,33 @@ async def on_message(message):
                 await client.logout()
             else:
                 Quitstate = False
-        if msg.startswith('ip'):
-                msg = get('https://api.ipify.org/').text
-                await client.send_message(message.channel, msg)
-        if msg.startswith('testrun'):
-                Prog = subprocess.Popen(['C:\\Windows\\System32\\calc.exe'])
-                msg = "calculator started"
-                await client.send_message(message.channel, msg)
-        if msg.startswith('testkill'):
-                Prog.terminate()
-                msg = "calculator stopped"
-                await client.send_message(message.channel, msg)
-        if msg.startswith('teststatus'):
-                if None == Prog.poll():
-                    msg = "calculator running"
-                else:
-                    msg = "calculator stopped"
-                await client.send_message(message.channel, msg)
+        try:
+                if msg.startswith('ip'):
+                        msg = get('https://api.ipify.org/').text
+                        await client.send_message(message.channel, msg)
+                if msg.startswith('run minecraft'):
+                        Prog = subprocess.Popen(['C:\\Windows\\System32\\calc.exe'])
+                        msg = "dad says no more than 12 hours"
+                        await client.send_message(message.channel, msg)
+                if msg.startswith('stop minecraft'):
+                        Prog.terminate()
+                        msg = "minecraft stopping"
+                        await client.send_message(message.channel, msg)
+                if msg.startswith('status minecraft'):
+                        if None == Prog.poll():
+                            msg = "minecraft running"
+                        else:
+                            msg = "minecraft stopped"
+                        await client.send_message(message.channel, msg)
+        except Exception as e:
+                await client.send_message(message.channel, "ERROR: " + str(e))
         
         if msg.startswith('quit'):
-                await client.send_message(message.channel, "Are you sure? \'Yes\' to confirm")
-                Quitstate = True
+                #await client.send_message(message.channel, "Are you sure? \'Yes\' to confirm")
+                #Quitstate = True
+                #For ease of development, removed this catch
+                await client.send_message(message.channel, "Disconnecting")
+                await client.logout()
 
 @client.event
 async def on_ready():
