@@ -4,11 +4,14 @@
 import discord
 from requests import get
 
+import subprocess
+
 client = discord.Client()
 
 USERID = '<@504121415360839680>'
 
 Quitstate = False
+Prog = []
 
 @client.event
 async def on_message(message):
@@ -21,6 +24,7 @@ async def on_message(message):
         print(msg)
 
         global Quitstate
+        global Prog
         if Quitstate:
             if msg.startswith('Yes'):
                 print(Quitstate)
@@ -29,6 +33,20 @@ async def on_message(message):
                 Quitstate = False
         if msg.startswith('ip'):
                 msg = get('https://api.ipify.org/').text
+                await client.send_message(message.channel, msg)
+        if msg.startswith('testrun'):
+                Prog = subprocess.Popen(['C:\\Windows\\System32\\calc.exe'])
+                msg = "calculator started"
+                await client.send_message(message.channel, msg)
+        if msg.startswith('testkill'):
+                Prog.terminate()
+                msg = "calculator stopped"
+                await client.send_message(message.channel, msg)
+        if msg.startswith('teststatus'):
+                if None == Prog.poll():
+                    msg = "calculator running"
+                else:
+                    msg = "calculator stopped"
                 await client.send_message(message.channel, msg)
         
         if msg.startswith('quit'):
